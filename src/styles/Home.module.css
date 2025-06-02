@@ -1,0 +1,237 @@
+/* src/styles/Home.module.css */
+
+/* Container for the entire page */
+.pageContainer {
+  padding: 1rem;
+  font-family: sans-serif;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Header section */
+.header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 3rem; /* larger font for header */
+  margin: 0;
+  color: #0070f3;
+}
+
+/* Subtitle under the header */
+.subtitle {
+  font-size: 1.125rem;
+  color: #555;
+  margin-top: 0.5rem;
+}
+
+/* Nav for signed-in users */
+.navSignedIn {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Individual nav link styling */
+.navLink {
+  text-decoration: none;
+  color: #0070f3;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border: 1px solid #0070f3;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.navLink:hover {
+  background-color: rgba(0, 112, 243, 0.1);
+}
+
+/* Section that contains sign-up / log-in forms */
+.authSection {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+/* Container around the auth form itself */
+.authContainer {
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Header above the auth form */
+.authHeader {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #333;
+}
+
+/* Form element inside authContainer */
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Label for each input */
+.formLabel {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* Input fields */
+.formInput {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 0.25rem;
+}
+
+/* Error text under form */
+.errorText {
+  color: #d00;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/* Success text (green) */
+.successText {
+  color: #2e7d32;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/* Button styling */
+.button {
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 0.5rem;
+}
+
+.button:hover {
+  background-color: #005bb5;
+}
+
+.button:disabled {
+  background-color: #99c2ff;
+  cursor: not-allowed;
+}
+
+/* Text for toggling between Login/Signup */
+.toggleText {
+  font-size: 0.875rem;
+  color: #555;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* "Sign Up"/"Log In" toggle link */
+.toggleButton {
+  background: none;
+  border: none;
+  color: #0070f3;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* ===== New styles for Log Activity card ===== */
+
+/* Card container (centered, responsive) */
+.card {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+/* Title inside the card */
+.cardTitle {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  color: #0070f3;
+  text-align: center;
+}
+
+/* Info section containers (reused from before) */
+.infoSection {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #fafafa;
+  border-radius: 6px;
+}
+
+.sectionHeader {
+  font-size: 1.5rem;
+  margin: 0 0 0.5rem;
+  color: #0070f3;
+}
+
+.paragraph {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.codeBlock {
+  background: #f4f4f4;
+  padding: 1rem;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.95rem;
+  overflow-x: auto;
+}
+
+.list {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.5;
+  padding-left: 1.25rem;
+}
+
+/* ===== Responsive tweaks ===== */
+@media (max-width: 600px) {
+  .card {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  .cardTitle {
+    font-size: 1.5rem;
+  }
+
+  .formInput {
+    font-size: 0.95rem;
+    padding: 0.45rem;
+  }
+
+  .button {
+    font-size: 0.95rem;
+    padding: 0.6rem 1rem;
+  }
+}
+
+

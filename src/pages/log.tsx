@@ -1,49 +1,76 @@
-// src/pages/profile.tsx
+// src/pages/log.tsx
 
+import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useSession, signOut } from 'next-auth/react';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from './api/auth/[...nextauth]';
-import { createClient } from '@supabase/supabase-js';
 import styles from '../styles/Home.module.css';
 
-// Initialize Supabase (use the anon key for selecting)
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
-export async function getServerSideProps(ctx) {
-  // 1) Ensure user is authenticated
+export async function getServerSideProps(ctx: any) {
   const session = await getServerSession(ctx.req, ctx.res, authOptions);
   if (!session) {
     return { redirect: { destination: '/auth/login', permanent: false } };
   }
-
-  const userId = session.user.id;
-
-  // 2) Query the 'profiles' table for this user's username
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('username')
-    .eq('id', userId)
-    .single();
-
-  if (error || !data) {
-    // If profile row is missing (shouldn't happen if signUp always inserted),
-    // fallback to email or redirect to fix your profile
-    return {
-      props: { username: session.user.email || null },
-    };
-  }
-
-  return {
-    props: { username: data.username },
-  };
+  return { props: {} };
 }
 
-export default function Profile({ username }: { username: string | null }) {
+export default function LogActivity() {
   const { data: session } = useSession();
+  const router = useRouter();
+
+  // Form state
+  const [activityType, setActivityType] = useState<'driving' | 'electricity'>('driving');
+  const [amount, setAmount] = useState('');
+  const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setFeedbackMsg(null);
+    setErrorMsg(null);
+
+    // Basic validation
+    const numericAmount = parseFloat(amount);
+    if (isNaN(numericAmount) || numericAmount <= 0) {
+      setErrorMsg('Please enter a valid positive number.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Build payload
+    const payload = {
+      type: activityType,
+      // For driving: kilometers; for electricity: kWh
+      amount: numericAmount,
+      date,
+    };
+
+    try {
+      const res = await fetch('/api/activities', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Failed to log activity.');
+      }
+
+      setFeedbackMsg('Activity logged successfully!');
+      setAmount('');
+      // Optionally redirect to dashboard or stay here
+    } catch (err: any) {
+      setErrorMsg(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <main className={styles.pageContainer}>
@@ -55,6 +82,9 @@ export default function Profile({ username }: { username: string | null }) {
       {/* Signed‐in nav */}
       {session && (
         <nav className={styles.navSignedIn}>
+          <Link href="/profile" className={styles.navLink}>
+            Profile
+          </Link>
           <Link href="/dashboard" className={styles.navLink}>
             Dashboard
           </Link>
@@ -77,14 +107,53 @@ export default function Profile({ username }: { username: string | null }) {
         </nav>
       )}
 
-      {/* Welcome card */}
+      {/* Log Activity Card */}
       <section className={styles.card}>
-        <h2 className={styles.cardTitle}>
-          Welcome, {username ? username : 'User'}!
-        </h2>
-        <p className={styles.cardText}>
-          Use the buttons above to view your dashboard or log a new activity.
-        </p>
+        <h2 className={styles.cardTitle}>Log a New Activity</h2>
+        <form onSubmit={handleSubmit} className={styles.authForm}>
+          <label className={styles.formLabel}>
+            Activity Type:
+            <select
+              value={activityType}
+              onChange={(e) => setActivityType(e.target.value as 'driving' | 'electricity')}
+              className={styles.formInput}
+            >
+              <option value="driving">Driving (km)</option>
+              <option value="electricity">Electricity (kWh)</option>
+            </select>
+          </label>
+
+          <label className={styles.formLabel}>
+            {activityType === 'driving' ? 'Kilometers Driven:' : 'kWh Used:'}
+            <input
+              type="number"
+              step="0.01"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              className={styles.formInput}
+              min="0"
+              required
+            />
+          </label>
+
+          <label className={styles.formLabel}>
+            Date:
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className={styles.formInput}
+              required
+            />
+          </label>
+
+          {errorMsg && <p className={styles.errorText}>{errorMsg}</p>}
+          {feedbackMsg && <p className={styles.successText}>{feedbackMsg}</p>}
+
+          <button type="submit" className={styles.button} disabled={isSubmitting}>
+            {isSubmitting ? 'Logging…' : 'Log Activity'}
+          </button>
+        </form>
       </section>
 
      {/* Info Sections (always visible) */}
@@ -148,7 +217,5 @@ kilometers driven × 0.18 kg CO₂/km = your kg CO₂ from driving
     </main>
   );
 }
-
-
 
 
