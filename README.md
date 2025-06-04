@@ -7,7 +7,7 @@ A personal climate-impact tracker built with Next.js, Supabase & Recharts.
 - **Backend:** Next.js API routes, Supabase Auth + Postgres
 - **Charts:** Recharts
 - **CI/CRON:** GitHub Actions or Supabase Edge Functions
-- **Deploy:** Vercel (app), Supabase (database)
+- **Deploy:** Vercel (app), Supabase (database) 
 
 ## Demonstrated Features
 - Sign-up & authentication via email/password and GitHub OAuth
