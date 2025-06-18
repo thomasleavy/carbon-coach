@@ -1,5 +1,5 @@
 # Carbon Coach
-
+ 
 A personal climate-impact tracker built with Next.js, Supabase & Recharts.
   
 ## Tech Stack 
