@@ -2,7 +2,7 @@
  
 A personal climate-impact tracker built with Next.js, Supabase & Recharts.
   
-## Tech Stack 
+## Tech Stack  
 - **Frontend:** Next.js (React + TypeScript), TanStack Query, CSS Modules
 - **Backend:** Next.js API routes, Supabase Auth + Postgres
 - **Charts:** Recharts
